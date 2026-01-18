@@ -1,0 +1,28 @@
+{
+  "name": {
+    "en": "NAS"
+  },
+  "class": "other",
+  "capabilities": [
+    "cpu_usage",
+    "ram_usage",
+    "storage_used"
+  ],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan",
+    "cloud"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "index"
+    }
+  ]
+}

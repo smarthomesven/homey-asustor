@@ -1,0 +1,18 @@
+<svg width="960" height="960" viewBox="0 0 960 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M829 814H147C127.67 814 112 798.33 112 779V177C112 157.67 127.67 142 147 142H829C848.33 142 864 157.67 864 177V779C864 798.33 848.33 814 829 814Z" stroke="black" stroke-width="40" fill="none"/>
+<path d="M235.5 143V813.5" stroke="black" stroke-width="20" fill="none"/>
+<circle cx="176" cy="222" r="23" fill="black"/>
+<ellipse cx="175.5" cy="276" rx="8.5" ry="8" fill="black"/>
+<ellipse cx="175.5" cy="316" rx="8.5" ry="8" fill="black"/>
+<ellipse cx="175.5" cy="356" rx="8.5" ry="8" fill="black"/>
+<ellipse cx="175.5" cy="396" rx="8.5" ry="8" fill="black"/>
+<ellipse cx="175.5" cy="436" rx="8.5" ry="8" fill="black"/>
+<ellipse cx="175.5" cy="476" rx="8.5" ry="8" fill="black"/>
+<ellipse cx="175.5" cy="516" rx="8.5" ry="8" fill="black"/>
+<ellipse cx="175.5" cy="556" rx="8.5" ry="8" fill="black"/>
+<rect x="153" y="583" width="46" height="40" rx="7" fill="black"/>
+<path d="M199 757V685C199 683.343 197.657 682 196 682H162C160.343 682 159 683.343 159 685V757C159 758.657 160.343 760 162 760H196C197.657 760 199 758.657 199 757Z" stroke="black" fill="none" stroke-width="10"/>
+<path d="M185 692V750" stroke="black" stroke-width="10" fill="none"/>
+<path d="M366 141L722 252.5V669.5L366 801" stroke="black" stroke-width="10" fill="none"/>
+<path d="M722 252.076L832.555 157M722 669.407L858 786" stroke="black" stroke-width="10" fill="none"/>
+</svg>

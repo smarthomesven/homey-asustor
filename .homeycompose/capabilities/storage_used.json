@@ -1,0 +1,9 @@
+{
+  "type": "number",
+  "title": { "en": "Disk usage" },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "%" },
+  "icon": "/assets/storage_used.svg"
+}

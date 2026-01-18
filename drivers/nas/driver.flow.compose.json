@@ -1,0 +1,39 @@
+{
+  "triggers": [
+    {
+      "id": "adm_update",
+      "title": { "en": "Update available" }
+    },
+    {
+      "id": "cpu_usage_changed",
+      "title": { "en": "CPU Usage changed" }
+    },
+    {
+      "id": "ram_usage_changed",
+      "title": { "en": "RAM Usage changed" }
+    },
+    {
+      "id": "storage_used_changed",
+      "title": { "en": "Disk usage changed" }
+    }
+  ],
+  "conditions": [
+    {
+      "id": "adm_update_condition",
+      "title": { "en": "Is update available?" }
+    },
+    {
+      "id": "lan_port_connected",
+      "title": { "en": "Is LAN connected?" },
+      "titleFormatted": { "en": "Is LAN [[port]] !{{connected|disconnected}}?" },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "port",
+          "title": { "en": "Port" },
+          "placeholder": { "en": "Port" }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <fieldset class="homey-form-fieldset" id="cloudid-fieldset">
+      <legend class="homey-form-legend">Enter your Cloud ID</legend>
+      <label for="cloudid" class="homey-form-label">Cloud ID:</label>
+      <input id="cloudid" type="text" placeholder="mynas" class="homey-form-input">
+    </fieldset>
+    <div id="connection-status" style="display: none; margin: 10px 0;">
+      <p><strong>Searching for NAS connection...</strong></p>
+      <ul id="status-list" style="list-style: none; padding-left: 0;">
+        <li id="status-lan">🔍 LAN: Checking...</li>
+        <li id="status-ddns">🔍 DDNS: Checking...</li>
+        <li id="status-wan">🔍 WAN: Checking...</li>
+        <li id="status-relay">🔍 Relay: Checking...</li>
+      </ul>
+    </div>
+    <div id="invalidcloudid" class="error">
+      <p>That cloud ID doesn't exist! Make sure you've activated EZConnect on your NAS.</p>
+    </div>
+    <div id="duplicatedevice" class="error">
+      <p>This NAS is already added to Homey. You cannot add the same NAS twice.</p>
+    </div>
+    <fieldset class="homey-form-fieldset" id="auth-fieldset" style="display: none;">
+      <legend class="homey-form-legend">Log in to the NAS</legend>
+      <label for="username" class="homey-form-label">Username:</label>
+      <input id="username" type="text" placeholder="Username" class="homey-form-input">
+      <label for="password" class="homey-form-label">Password</label>
+      <input id="password" type="password" placeholder="Password" class="homey-form-input">
+    </fieldset>  
+    <div id="errortext" class="error">
+      <p>Invalid credentials!</p>
+    </div>
+    <div id="blockedtext" class="error">
+      <p>Homey has been blocked by ADM Defender, likely by making too many failed login attempts. Check the IP blacklist in the ADM Defender settings and remove Homey's IP address from it.</p>
+    </div>
+    <div id="nocloudid" class="error">
+      <p>That Cloud ID is reserved for system purposes.</p>
+    </div>
+    <div id="unexpectederror" class="error">
+      <p>An unexpected error occurred!</p>
+    </div>
+    <button id="connectbutton" onclick="connect()" class="homey-button-primary-full">Connect</button>
+    <button id="authbutton" onclick="login()" class="homey-button-primary-full" style="display: none;">Login</button>
+    <style>
+      .error {
+        color: red;
+        display: none;
+        margin: 10px 0;
+      }
+      #status-list li {
+        margin: 5px 0;
+      }
+    </style>
+
+    <script>
+      const cloudidfieldset = document.getElementById("cloudid-fieldset");
+      const connectbutton = document.getElementById("connectbutton");
+      const authfieldset = document.getElementById("auth-fieldset");
+      const authbutton = document.getElementById("authbutton");
+      const username = document.getElementById("username");
+      const password = document.getElementById("password");
+      const errortext = document.getElementById("errortext");
+      const blockedtext = document.getElementById("blockedtext");
+      const invalidcloudid = document.getElementById("invalidcloudid");
+      const nocloudid = document.getElementById("nocloudid");
+      const unexpectederror = document.getElementById("unexpectederror");
+      const duplicatedevice = document.getElementById("duplicatedevice");
+      const connectionStatus = document.getElementById("connection-status");
+      let cloudid;
+      let workingurl;
+      let sid;
+      
+      // Listen for URL test updates
+      Homey.on('url_test', function(data) {
+        const statusEl = document.getElementById(`status-${data.type.toLowerCase()}`);
+        if (statusEl) {
+          if (data.status === 'testing') {
+            statusEl.textContent = `🔍 ${data.type}: Checking...`;
+          } else if (data.status === 'success') {
+            statusEl.textContent = `✅ ${data.type}: Connected!`;
+          } else if (data.status === 'failed') {
+            statusEl.textContent = `❌ ${data.type}: Failed`;
+          }
+        }
+      });
+      
+      // Listen for final URL result
+      Homey.on('url_result', function(data) {
+        if (data.status === 'invalid') {
+          invalidcloudid.style.display = 'block';
+          connectbutton.className = 'homey-button-primary-full';
+          connectbutton.textContent = 'Connect';
+          connectionStatus.style.display = 'none';
+        } else if (data.status === 'success') {
+          cloudidfieldset.style.display = "none";
+          connectbutton.style.display = "none";
+          invalidcloudid.style.display = "none";
+          nocloudid.style.display = 'none';
+          unexpectederror.style.display = 'none';
+          connectionStatus.style.display = 'none';
+          authfieldset.style.display = "block";
+          authbutton.style.display = "block";
+          workingurl = data.url;
+        } else if (data.status === 'error') {
+          connectbutton.className = 'homey-button-primary-full';
+          connectbutton.textContent = 'Connect';
+          unexpectederror.style.display = 'block';
+          connectionStatus.style.display = 'none';
+        }
+      });
+      
+      async function login() {
+        authbutton.className = 'homey-button-primary-full is-loading';
+        authbutton.textContent = 'Logging in';
+        errortext.style.display = 'none';
+        blockedtext.style.display = 'none';
+        invalidcloudid.style.display = 'none';
+        unexpectederror.style.display = 'none';
+        duplicatedevice.style.display = 'none';
+        
+        try {
+          const result = await Homey.emit("auth", { 
+            "url": workingurl, 
+            "username": username.value, 
+            "password": password.value
+          });
+          
+          if (result === 'invalid') {
+            authbutton.className = 'homey-button-primary-full';
+            authbutton.textContent = 'Login';
+            errortext.style.display = 'block';
+            return;
+          }
+          if (result === 'blocked') {
+            authbutton.className = 'homey-button-primary-full';
+            authbutton.textContent = 'Login';
+            blockedtext.style.display = 'block';
+            return;
+          }
+          if (result === 'autherror') {
+            authbutton.className = 'homey-button-primary-full';
+            authbutton.textContent = 'Login';
+            unexpectederror.style.display = 'block';
+            return;
+          }
+          
+          console.log(result);
+          sid = result;
+          
+          // Check for duplicates before adding device
+          await Homey.emit("list_devices");
+          
+          Homey.addDevice({
+            data: {
+              "cloudid": cloudid
+            },
+            store: {
+              "url": workingurl,
+              "username": username.value,
+              "password": password.value,
+              "cloudid": cloudid,
+              "sid": sid,
+              "last_url_check": Date.now(),
+              "last_update_check": 0,
+              "update_notified": false,
+              "update_notified_version": ""
+            },
+            name: cloudid
+          }, (err, result) => {
+            if (err) {
+              console.error(err);
+              if (err.message && err.message.includes('already added')) {
+                authbutton.className = 'homey-button-primary-full';
+                authbutton.textContent = 'Login';
+                duplicatedevice.style.display = 'block';
+              } else {
+                authbutton.className = 'homey-button-primary-full';
+                authbutton.textContent = 'Login';
+                unexpectederror.style.display = 'block';
+              }
+              return;
+            }
+            Homey.done();
+          });
+        } catch (err) {
+          console.error('Login error:', err);
+          authbutton.className = 'homey-button-primary-full';
+          authbutton.textContent = 'Login';
+          if (err.message && err.message.includes('already added')) {
+            duplicatedevice.style.display = 'block';
+          } else {
+            unexpectederror.style.display = 'block';
+          }
+        }
+      }
+      
+      async function connect() {
+        invalidcloudid.style.display = 'none';
+        nocloudid.style.display = 'none';
+        unexpectederror.style.display = 'none';
+        duplicatedevice.style.display = 'none';
+        
+        cloudid = document.getElementById('cloudid').value;
+        
+        if (cloudid === 'www' || cloudid === 'relay-eu' || cloudid === 'turn' || cloudid === 'relay-us' || cloudid === 'signal') {
+          nocloudid.style.display = 'block';
+          connectbutton.className = 'homey-button-primary-full';
+          connectbutton.textContent = 'Connect';
+          return;
+        }
+        
+        connectbutton.className = 'homey-button-primary-full is-loading';
+        connectbutton.textContent = 'Searching for NAS...';
+        connectionStatus.style.display = 'block';
+        
+        // Reset status indicators
+        document.getElementById('status-lan').textContent = '🔍 LAN: Waiting...';
+        document.getElementById('status-ddns').textContent = '🔍 DDNS: Waiting...';
+        document.getElementById('status-wan').textContent = '🔍 WAN: Waiting...';
+        document.getElementById('status-relay').textContent = '🔍 Relay: Waiting...';
+        
+        try {
+          const result = await Homey.emit("cloudid", { "cloudid": cloudid });
+          
+          if (result === 'invalid') {
+            invalidcloudid.style.display = 'block';
+            connectbutton.className = 'homey-button-primary-full';
+            connectbutton.textContent = 'Connect';
+            connectionStatus.style.display = 'none';
+            return;
+          }
+          if (result === 'connecterror') {
+            connectbutton.className = 'homey-button-primary-full';
+            connectbutton.textContent = 'Connect';
+            unexpectederror.style.display = 'block';
+            connectionStatus.style.display = 'none';
+            return;
+          }
+          
+          // Result is 'searching', wait for url_result event
+        } catch (err) {
+          console.error('Connect error:', err);
+          connectbutton.className = 'homey-button-primary-full';
+          connectbutton.textContent = 'Connect';
+          unexpectederror.style.display = 'block';
+          connectionStatus.style.display = 'none';
+        }
+      }
+    </script>
+  </body>
+</html>
