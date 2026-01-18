@@ -19,10 +19,6 @@
   ],
   "conditions": [
     {
-      "id": "adm_update_condition",
-      "title": { "en": "Is update available?" }
-    },
-    {
       "id": "lan_port_connected",
       "title": { "en": "Is LAN connected?" },
       "titleFormatted": { "en": "Is LAN [[port]] !{{connected|disconnected}}?" },

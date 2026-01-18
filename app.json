@@ -85,19 +85,6 @@
     ],
     "conditions": [
       {
-        "id": "adm_update_condition",
-        "title": {
-          "en": "Is update available?"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=nas"
-          }
-        ]
-      },
-      {
         "id": "lan_port_connected",
         "title": {
           "en": "Is LAN connected?"
