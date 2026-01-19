@@ -2,13 +2,13 @@
 
 const Homey = require('homey');
 
-module.exports = class MyDevice extends Homey.Device {
+module.exports = class NASDevice extends Homey.Device {
 
   async onInit() {
     this.log('NAS has been initialized');
     
     // Only register flow cards if not already registered
-    if (!this.flowCardsRegistered) {    
+    if (!this.flowCardsRegistered) {  
       const lanCondition = this.homey.flow.getConditionCard("lan_port_connected");
       lanCondition.registerRunListener(async (args, state) => {
         const result = await this.driver.checkLANPort(this, args.port.id);
@@ -50,22 +50,9 @@ module.exports = class MyDevice extends Homey.Device {
       }
     }, 10000);
     
-    // Check firmware updates every hour
-    this.updateInterval = this.homey.setInterval(async () => {
-      try {
-        await this.driver.checkFirmwareUpdates(this);
-      } catch (err) {
-        this.error('Error checking firmware updates:', err);
-      }
-    }, 3600000);
-    
     // Initial checks
     this.driver.updateSystemStats(this).catch(err => {
       this.error('Initial system stats update failed:', err);
-    });
-    
-    this.driver.checkFirmwareUpdates(this).catch(err => {
-      this.error('Initial firmware check failed:', err);
     });
   }
 
@@ -87,9 +74,6 @@ module.exports = class MyDevice extends Homey.Device {
     // Clear all intervals
     if (this.statsInterval) {
       this.homey.clearInterval(this.statsInterval);
-    }
-    if (this.updateInterval) {
-      this.homey.clearInterval(this.updateInterval);
     }
   }
 };

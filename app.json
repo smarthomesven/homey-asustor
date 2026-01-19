@@ -8,10 +8,10 @@
     "local"
   ],
   "name": {
-    "en": "Asustor"
+    "en": "ASUSTOR"
   },
   "description": {
-    "en": "Add support for ASUSTOR NAS devices"
+    "en": "Reliable storage for home and office"
   },
   "category": [
     "appliances"
@@ -30,19 +30,6 @@
   },
   "flow": {
     "triggers": [
-      {
-        "id": "adm_update",
-        "title": {
-          "en": "Update available"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=nas"
-          }
-        ]
-      },
       {
         "id": "cpu_usage_changed",
         "title": {

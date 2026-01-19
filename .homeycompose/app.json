@@ -1,16 +1,16 @@
 {
   "id": "com.asustor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
     "local"
   ],
   "name": {
-    "en": "Asustor"
+    "en": "ASUSTOR"
   },
   "description": {
-    "en": "Add support for ASUSTOR NAS devices"
+    "en": "Reliable storage for home and office"
   },
   "category": [
     "appliances"

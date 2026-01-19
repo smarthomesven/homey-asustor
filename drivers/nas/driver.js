@@ -4,50 +4,7 @@ const Homey = require('homey');
 const axios = require('axios');
 const FormData = require('form-data');
 
-module.exports = class MyDriver extends Homey.Driver {
-
-  async checkADMUpdate(device){
-    try {
-      const installedVersion = await device.getStoreValue('installed_version');
-      const latestVersion = await device.getStoreValue('latest_version');
-      
-      if (!installedVersion || !latestVersion) {
-        return false;
-      }
-      
-      // Update available if versions don't match
-      return installedVersion !== latestVersion;
-    } catch (err) {
-      this.error("Failed checking for ADM updates", err);
-      return false;
-    }
-  }
-
-  compareVersions(v1, v2) {
-    // Compare version strings like "4.3.3.ROF1" vs "4.3.3.RKD2"
-    const parts1 = v1.split('.');
-    const parts2 = v2.split('.');
-    
-    for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-      const part1 = parts1[i] || '0';
-      const part2 = parts2[i] || '0';
-      
-      // Extract numeric part
-      const num1 = parseInt(part1.match(/\d+/)?.[0] || '0');
-      const num2 = parseInt(part2.match(/\d+/)?.[0] || '0');
-      
-      if (num1 !== num2) {
-        return num1 - num2;
-      }
-      
-      // If numeric parts are equal, compare string parts
-      if (part1 !== part2) {
-        return part1.localeCompare(part2);
-      }
-    }
-    
-    return 0;
-  }
+module.exports = class NASDriver extends Homey.Driver {
 
   async checkLANPort(device, lanInterface) {
     try {
@@ -176,17 +133,9 @@ module.exports = class MyDriver extends Homey.Driver {
   async onInit() {
     try { 
       this.log('NAS driver init');
-      this._admUpdateAvailable = this.homey.flow.getDeviceTriggerCard("adm_update");
     } catch (err) {
       this.error("Error during NAS driver initialization:", err);
     }
-  }
-
-  triggerUpdateFlow(device) {
-    this._admUpdateAvailable
-      .trigger(device, {}, {})
-      .then(this.log)
-      .catch(this.error);
   }
 
   async onPairListDevices() {
@@ -398,108 +347,6 @@ module.exports = class MyDriver extends Homey.Driver {
     } catch (e) {
       this.error("Error parsing apiResult JSON", e);
       throw e;
-    }
-  }
-
-  async checkFirmwareUpdates(device) {
-    try {
-      const sid = await device.getStoreValue('sid');
-      let nasurl;
-      
-      try {
-        nasurl = await this.getWorkingUrl(device);
-      } catch (err) {
-        // getWorkingUrl already handled the error and set unavailable
-        return;
-      }
-      
-      // Get installed version
-      const staticUrl = `${nasurl}portal/apis/settings/firmwarestatus.cgi?sid=${sid}&act=get_static_info`;
-      let staticRes;
-      
-      try {
-        staticRes = await axios.get(staticUrl, { timeout: 7000 });
-      } catch (err) {
-        if (err.response?.status === 403) {
-          this.log('Firmware check blocked by ADM Defender (403)');
-          await device.setUnavailable("Homey is blocked by the ADM Defender. Remove Homey's IP from the ADM Defender blocklist.");
-          return;
-        }
-        if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT') {
-          this.log(`Firmware check failed: ${err.code}`);
-          return;
-        }
-        this.log("Failed to get firmware status:", err.message);
-        return;
-      }
-      
-      // Check for authentication errors (256, 5000, 5001, 5053)
-      if (staticRes.data.error_code === 256 || staticRes.data.error_code === 5000 || 
-          staticRes.data.error_code === 5001 || staticRes.data.error_code === 5053) {
-        this.log("Session expired during firmware check (error code: " + staticRes.data.error_code + "), re-logging in");
-        await this.nasLogin(device);
-        return;
-      }
-      
-      const installedVersion = staticRes.data.installed_version;
-      await device.setStoreValue('installed_version', installedVersion);
-      
-      // Check for new version (only once per hour)
-      const lastUpdateCheck = await device.getStoreValue('last_update_check') || 0;
-      const now = Date.now();
-      
-      if (now - lastUpdateCheck > 3600000) { // 1 hour
-        const updateUrl = `${nasurl}portal/apis/settings/firmwarestatus.cgi?sid=${sid}&act=get_new_adm_info_from_remote_server&timeout=60&distinguish_same_from_up_to_date=true`;
-        let updateRes;
-        
-        try {
-          updateRes = await axios.get(updateUrl, { timeout: 65000 });
-        } catch (err) {
-          if (err.response?.status === 403) {
-            this.log('Update check blocked by ADM Defender (403)');
-            await device.setUnavailable("Homey is blocked by the ADM Defender. Remove Homey's IP from the ADM Defender blocklist.");
-            return;
-          }
-          if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT') {
-            this.log(`Update check failed: ${err.code}`);
-            return;
-          }
-          this.log("Failed to check for updates:", err.message);
-          return;
-        }
-        
-        // Check for authentication errors (256, 5000, 5001, 5053)
-        if (updateRes.data.error_code === 256 || updateRes.data.error_code === 5000 || 
-            updateRes.data.error_code === 5001 || updateRes.data.error_code === 5053) {
-          this.log("Session expired during update check (error code: " + updateRes.data.error_code + "), re-logging in");
-          await this.nasLogin(device);
-          return;
-        }
-        
-        if (updateRes.data.error_code !== 6215 && updateRes.data.version) {
-          const latestVersion = updateRes.data.version;
-          await device.setStoreValue('latest_version', latestVersion);
-          
-          // Check if update is available (versions don't match) and hasn't been notified yet
-          const updateNotified = await device.getStoreValue('update_notified') || false;
-          const updateNotifiedVersion = await device.getStoreValue('update_notified_version') || '';
-          
-          if (latestVersion !== installedVersion && 
-              (!updateNotified || updateNotifiedVersion !== latestVersion)) {
-            this.triggerUpdateFlow(device);
-            await device.setStoreValue('update_notified', true);
-            await device.setStoreValue('update_notified_version', latestVersion);
-          } else if (latestVersion === installedVersion) {
-            // Reset notification flag when versions match again
-            await device.setStoreValue('update_notified', false);
-            await device.setStoreValue('update_notified_version', '');
-          }
-        }
-        
-        await device.setStoreValue('last_update_check', now);
-      }
-    } catch (err) {
-      this.error("Unexpected error checking firmware updates:", err.message);
     }
   }
 

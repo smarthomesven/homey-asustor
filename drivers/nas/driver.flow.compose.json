@@ -1,10 +1,6 @@
 {
   "triggers": [
     {
-      "id": "adm_update",
-      "title": { "en": "Update available" }
-    },
-    {
       "id": "cpu_usage_changed",
       "title": { "en": "CPU Usage changed" }
     },
