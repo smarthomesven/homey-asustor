@@ -16,8 +16,8 @@
   "conditions": [
     {
       "id": "lan_port_connected",
-      "title": { "en": "Is LAN connected?" },
-      "titleFormatted": { "en": "Is LAN [[port]] !{{connected|disconnected}}?" },
+      "title": { "en": "LAN port connected" },
+      "titleFormatted": { "en": "LAN [[port]] !{{connected|disconnected}}" },
       "args": [
         {
           "type": "autocomplete",

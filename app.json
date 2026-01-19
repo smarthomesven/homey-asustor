@@ -74,10 +74,10 @@
       {
         "id": "lan_port_connected",
         "title": {
-          "en": "Is LAN connected?"
+          "en": "LAN port connected"
         },
         "titleFormatted": {
-          "en": "Is LAN [[port]] !{{connected|disconnected}}?"
+          "en": "LAN [[port]] !{{connected|disconnected}}"
         },
         "args": [
           {
