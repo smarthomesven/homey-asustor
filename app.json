@@ -19,6 +19,10 @@
   "permissions": [],
   "brandColor": "#139ED8",
   "source": "https://github.com/smarthomesven/homey-asustor",
+  "bugs": {
+    "url": "https://github.com/smarthomesven/homey-asustor/issues"
+  },
+  "homeyCommunityTopicId": 149531,
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
