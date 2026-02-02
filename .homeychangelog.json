@@ -13,5 +13,8 @@
   },
   "1.0.4": {
     "en": "Added forum topic and issues URL"
+  },
+  "1.0.5": {
+    "en": "Update dependencies"
   }
 }
