@@ -25,5 +25,8 @@
   },
   "1.0.8": {
     "en": "Added tags for app store visibility"
+  },
+  "1.1.0": {
+    "en": "Added Flow cards for enabling and disabling apps"
   }
 }
