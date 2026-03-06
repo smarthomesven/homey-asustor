@@ -27,5 +27,49 @@
         }
       ]
     }
+  ],
+  "actions": [
+    {
+      "id": "enable_app",
+      "title": {
+        "en": "Enable app"
+      },
+      "titleFormatted": {
+        "en": "Enable [[app]]"
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "app",
+          "title": {
+            "en": "App"
+          },
+          "placeholder": {
+            "en": "SoundsGood"
+          }
+        }
+      ]
+    },
+    {
+      "id": "disable_app",
+      "title": {
+        "en": "Disable app"
+      },
+      "titleFormatted": {
+        "en": "Disable [[app]]"
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "app",
+          "title": {
+            "en": "App"
+          },
+          "placeholder": {
+            "en": "SoundsGood"
+          }
+        }
+      ]
+    }
   ]
 }

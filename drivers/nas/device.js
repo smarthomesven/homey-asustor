@@ -21,6 +21,33 @@ module.exports = class NASDevice extends Homey.Device {
           return await this.driver.autocompleteNas(this, query);
         }
       );
+
+      const enableAppAction = this.homey.flow.getActionCard("enable_app");
+      const disableAppAction = this.homey.flow.getActionCard("disable_app");
+
+      enableAppAction.registerArgumentAutocompleteListener(
+        "app",
+        async (query, args) => {
+          return await this.driver.autocompleteApp(this, query);
+        }
+      );
+
+      disableAppAction.registerArgumentAutocompleteListener(
+        "app",
+        async (query, args) => {
+          return await this.driver.autocompleteApp(this, query);
+        }
+      );
+
+      disableAppAction.registerRunListener(async (args, state) => {
+        const result = await this.driver.disableApp(this, args);
+        return result;
+      });
+
+      enableAppAction.registerRunListener(async (args, state) => {
+        const result = await this.driver.enableApp(this, args);
+        return result;
+      });
       
       this.flowCardsRegistered = true;
     }

@@ -21,6 +21,72 @@ module.exports = class NASDriver extends Homey.Driver {
     }
   }
 
+  async autocompleteApp(device, query) {
+    try {
+      const sid = await device.getStoreValue('sid');
+      const nasurl = await this.getWorkingUrl(device);
+      const formData = new FormData();
+      formData.append('includeBeta', 1);
+      formData.append('page', 1);
+      formData.append('limit', 50);
+      formData.append('start', 0);
+      formData.append('category', -1);
+      formData.append('keyword', '');
+      formData.append('sort', 'name');
+      const url = `${nasurl}portal/apis/appCentral/appcentral.cgi?sid=${sid}&act=list-installed`;
+      const res = await axios.post(url, formData, { timeout: 7000 });
+      const data = res.data;
+      const results = data.items
+        .filter(app => app.name.toLowerCase().includes(query.toLowerCase()))
+        .filter(app => app.lock_enable === false)
+        .map(app => ({
+          name: app.name,
+          description: app.enabled === true ? "Enabled" : "Disabled",
+          id: app.package
+        }));
+      return results;
+    } catch (err) {
+      this.error("Failed fetching app list for autocomplete", err);
+      return [];
+    }
+  }
+
+  async enableApp(device, args) {
+    try {
+      const sid = await device.getStoreValue('sid');
+      const nasurl = await this.getWorkingUrl(device);
+      const formData = new FormData();
+      formData.append('name', args.app.id);
+      const url = `${nasurl}portal/apis/appCentral/appcentral.cgi?sid=${sid}&act=enable`;
+      const res = await axios.post(url, formData, { timeout: 7000 });
+      if (res?.data?.error_code === 6010) {
+        throw new Error("This app is in use by another app");
+      }
+      return true;
+    } catch (err) {
+      this.error("Failed enabling app: ", err);
+      throw new Error("Failed to disable app");
+    }
+  }
+
+  async disableApp(device, args) {
+    try {
+      const sid = await device.getStoreValue('sid');
+      const nasurl = await this.getWorkingUrl(device);
+      const formData = new FormData();
+      formData.append('name', args.app.id);
+      const url = `${nasurl}portal/apis/appCentral/appcentral.cgi?sid=${sid}&act=disable`;
+      const res = await axios.post(url, formData, { timeout: 7000 });
+      if (res?.data?.error_code === 6010) {
+        throw new Error("This app is in use by another app");
+      }
+      return true;
+    } catch (err) {
+      this.error("Failed disabling app: ", err);
+      throw new Error(err.message);
+    }
+  }
+
   async getWorkingUrl(device) {
     try {
       const cloudId = await device.getStoreValue('cloudid');
