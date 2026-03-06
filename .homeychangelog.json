@@ -28,5 +28,8 @@
   },
   "1.1.0": {
     "en": "Added Flow cards for enabling and disabling apps"
+  },
+  "1.1.1": {
+    "en": "Added app enabled condition Flow card"
   }
 }
