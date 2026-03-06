@@ -26,6 +26,19 @@
           "placeholder": { "en": "Port" }
         }
       ]
+    },
+    {
+      "id": "app_enabled",
+      "title": { "en": "App is enabled" },
+      "titleFormatted": { "en": "[[app]] is !{{enabled|disabled}}" },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "app",
+          "title": { "en": "App" },
+          "placeholder": { "en": "SoundsGood" }
+        }
+      ]
     }
   ],
   "actions": [

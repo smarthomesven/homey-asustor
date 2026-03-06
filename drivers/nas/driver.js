@@ -87,6 +87,31 @@ module.exports = class NASDriver extends Homey.Driver {
     }
   }
 
+  async checkApp(device, args) {
+    try {
+      const sid = await device.getStoreValue('sid');
+      const nasurl = await this.getWorkingUrl(device);
+      const formData = new FormData();
+      formData.append('includeBeta', 1);
+      formData.append('page', 1);
+      formData.append('limit', 50);
+      formData.append('start', 0);
+      formData.append('category', -1);
+      formData.append('keyword', '');
+      formData.append('sort', 'name');
+      const url = `${nasurl}portal/apis/appCentral/appcentral.cgi?sid=${sid}&act=list-installed`;
+      const res = await axios.post(url, formData, { timeout: 7000 });
+      const data = res.data;
+      const result = data.items
+        .filter(app => app.lock_enable === false)
+        .find(app => app.package === args.app.id);
+      return result?.enabled === true;
+    } catch (err) {
+      this.error("Failed fetching app list for autocomplete", err);
+      throw new Error("Failed to check app status");
+    }
+  }
+
   async getWorkingUrl(device) {
     try {
       const cloudId = await device.getStoreValue('cloudid');

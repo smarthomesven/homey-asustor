@@ -24,6 +24,7 @@ module.exports = class NASDevice extends Homey.Device {
 
       const enableAppAction = this.homey.flow.getActionCard("enable_app");
       const disableAppAction = this.homey.flow.getActionCard("disable_app");
+      const appEnabledCondition = this.homey.flow.getConditionCard("app_enabled");
 
       enableAppAction.registerArgumentAutocompleteListener(
         "app",
@@ -39,6 +40,13 @@ module.exports = class NASDevice extends Homey.Device {
         }
       );
 
+      appEnabledCondition.registerArgumentAutocompleteListener(
+        "app",
+        async (query, args) => {
+          return await this.driver.autocompleteApp(this, query);
+        }
+      );
+
       disableAppAction.registerRunListener(async (args, state) => {
         const result = await this.driver.disableApp(this, args);
         return result;
@@ -46,6 +54,11 @@ module.exports = class NASDevice extends Homey.Device {
 
       enableAppAction.registerRunListener(async (args, state) => {
         const result = await this.driver.enableApp(this, args);
+        return result;
+      });
+
+      appEnabledCondition.registerRunListener(async (args, state) => {
+        const result = await this.driver.checkApp(this, args);
         return result;
       });
       
