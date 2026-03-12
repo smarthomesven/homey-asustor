@@ -69,6 +69,40 @@ module.exports = class NASDriver extends Homey.Driver {
     }
   }
 
+  async reboot(device) {
+    try {
+      const sid = await device.getStoreValue('sid');
+      const nasurl = await this.getWorkingUrl(device);
+      const url = `${nasurl}portal/apis/admin.cgi?sid=${sid}&act=restart`;
+      const res = await axios.get(url, { timeout: 7000 });
+      if (res?.data?.success) {
+        return true;
+      } else {
+        throw new Error("Failed to reboot NAS");
+      }
+    } catch (err) {
+      this.error("Failed rebooting NAS: ", err);
+      throw new Error("Failed to reboot NAS");
+    }
+  }
+
+  async shutdown(device) {
+    try {
+      const sid = await device.getStoreValue('sid');
+      const nasurl = await this.getWorkingUrl(device);
+      const url = `${nasurl}portal/apis/admin.cgi?sid=${sid}&act=shutdown`;
+      const res = await axios.get(url, { timeout: 7000 });
+      if (res?.data?.success) {
+        return true;
+      } else {
+        throw new Error("Failed to shut down NAS");
+      }
+    } catch (err) {
+      this.error("Failed shutting down NAS: ", err);
+      throw new Error("Failed to shutdown NAS");
+    }
+  }
+
   async disableApp(device, args) {
     try {
       const sid = await device.getStoreValue('sid');

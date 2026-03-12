@@ -6,8 +6,34 @@
   "capabilities": [
     "cpu_usage",
     "ram_usage",
-    "storage_used"
+    "storage_used",
+    "button.reboot",
+    "button.shutdown"
   ],
+  "capabilitiesOptions": {
+    "button.reboot": {
+      "maintenanceAction": true,
+      "title": {
+        "en": "Reboot",
+        "nl": "Opnieuw opstarten"
+      },
+      "desc": {
+        "en": "Reboots the NAS",
+        "nl": "De NAS opnieuw opstarten"
+      }
+    },
+    "button.shutdown": {
+      "maintenanceAction": true,
+      "title": {
+        "en": "Shutdown",
+        "nl": "Afsluiten"
+      },
+      "desc": {
+        "en": "Shut down the NAS gracefully",
+        "nl": "De NAS veilig afsluiten"
+      }
+    }
+  },
   "platforms": [
     "local"
   ],

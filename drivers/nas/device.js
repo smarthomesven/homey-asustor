@@ -6,6 +6,35 @@ module.exports = class NASDevice extends Homey.Device {
 
   async onInit() {
     this.log('NAS has been initialized');
+
+    if (!this.hasCapability('button.reboot')) {
+      await this.addCapability('button.reboot');
+      await this.setCapabilityOptions('button.reboot', {
+        maintenanceAction: true,
+        title: {
+          en: 'Reboot',
+          nl: 'Opnieuw opstarten',
+        },
+        desc: {
+          en: 'Reboots the NAS',
+          nl: 'De NAS herstarten'
+        }
+      });
+    }
+    if (!this.hasCapability('button.shutdown')) {
+      await this.addCapability('button.shutdown');
+      await this.setCapabilityOptions('button.shutdown', {
+        maintenanceAction: true,
+        title: {
+          en: 'Shutdown',
+          nl: 'Afsluiten'
+        },
+        desc: {
+          en: 'Shut down the NAS gracefully',
+          nl: 'De NAS veilig afsluiten'
+        }
+      });
+    }
     
     // Only register flow cards if not already registered
     if (!this.flowCardsRegistered) {  
@@ -21,6 +50,28 @@ module.exports = class NASDevice extends Homey.Device {
           return await this.driver.autocompleteNas(this, query);
         }
       );
+
+      this.registerCapabilityListener('button.reboot', async () => {
+        // Maintenance action button was pressed, return a promise
+        try {
+          await this.driver.reboot(this);
+          return true;
+        } catch (err) {
+          this.error('Error rebooting NAS:', err);
+          throw new Error('Failed to reboot NAS');
+        }
+      });
+
+      this.registerCapabilityListener('button.shutdown', async () => {
+        // Maintenance action button was pressed, return a promise
+        try {
+          await this.driver.shutdown(this);
+          return true;
+        } catch (err) {
+          this.error('Error shutting down NAS:', err);
+          throw new Error('Failed to shut down NAS');
+        }
+      });
 
       const enableAppAction = this.homey.flow.getActionCard("enable_app");
       const disableAppAction = this.homey.flow.getActionCard("disable_app");
