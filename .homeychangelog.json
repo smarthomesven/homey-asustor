@@ -31,5 +31,8 @@
   },
   "1.1.1": {
     "en": "Added app enabled condition Flow card"
+  },
+  "1.1.2": {
+    "en": "Added maintenance actions for reboot and shutdown"
   }
 }
