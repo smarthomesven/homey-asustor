@@ -34,5 +34,8 @@
   },
   "1.1.2": {
     "en": "Added maintenance actions for reboot and shutdown"
+  },
+  "1.1.3": {
+    "en": "Added Dutch translations and updated dependencies"
   }
 }
