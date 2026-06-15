@@ -10,54 +10,14 @@
     "en": "ASUSTOR"
   },
   "description": {
-    "en": "Reliable storage for home and office"
+    "en": "Reliable storage for home and office",
+    "nl": "Betrouwbare opslag voor thuis en kantoor"
   },
   "category": [
     "appliances"
   ],
   "tags": {
     "en": [
-      "adm",
-      "drivestor",
-      "lockerstor",
-      "flashstor",
-      "nimbustor",
-      "as-202te",
-      "as1102tl",
-      "as1104t",
-      "as1202t",
-      "as1204t",
-      "as3302t",
-      "as3304t",
-      "as4004t",
-      "as5202t",
-      "as5304t",
-      "as5402t",
-      "as5404t",
-      "as6504rs",
-      "as6504rd",
-      "as6508t",
-      "as6510t",
-      "as6512rd",
-      "as6702t",
-      "as6704t",
-      "as6706t",
-      "as6804t",
-      "as6806t",
-      "as6808t",
-      "as6810t",
-      "as7004t",
-      "as7110t",
-      "as7112rdx",
-      "as7116rdx",
-      "as7212rdx",
-      "as7216rdx",
-      "fs6706t",
-      "fs6712x",
-      "fs6806x",
-      "fs6812x"
-    ],
-    "nl": [
       "adm",
       "drivestor",
       "lockerstor",

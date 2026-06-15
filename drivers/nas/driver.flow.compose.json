@@ -2,35 +2,61 @@
   "triggers": [
     {
       "id": "cpu_usage_changed",
-      "title": { "en": "CPU Usage changed" }
+      "title": { 
+        "en": "CPU Usage changed",
+        "nl": "CPU-gebruik gewijzigd"
+       }
     },
     {
       "id": "ram_usage_changed",
-      "title": { "en": "RAM Usage changed" }
+      "title": { 
+        "en": "RAM Usage changed",
+        "nl": "RAM-gebruik gewijzigd"
+      }
     },
     {
       "id": "storage_used_changed",
-      "title": { "en": "Disk usage changed" }
+      "title": { 
+        "en": "Disk usage changed",
+        "nl": "Opslaggebruik gewijzigd"
+      }
     }
   ],
   "conditions": [
     {
       "id": "lan_port_connected",
-      "title": { "en": "LAN port connected" },
-      "titleFormatted": { "en": "LAN [[port]] !{{connected|disconnected}}" },
+      "title": {
+        "en": "LAN port connected",
+        "nl": "LAN-poort aangesloten"
+      },
+      "titleFormatted": {
+        "en": "LAN [[port]] !{{connected|disconnected}}",
+        "nl": "LAN [[port]] !{{aangesloten|niet aangesloten}}"
+      },
       "args": [
         {
           "type": "autocomplete",
           "name": "port",
-          "title": { "en": "Port" },
-          "placeholder": { "en": "Port" }
+          "title": { 
+            "en": "Port",
+            "nl": "Poort"
+          },
+          "placeholder": {
+            "en": "LAN1"
+          }
         }
       ]
     },
     {
       "id": "app_enabled",
-      "title": { "en": "App is enabled" },
-      "titleFormatted": { "en": "[[app]] is !{{enabled|disabled}}" },
+      "title": {
+        "en": "App is enabled",
+        "nl": "App is ingeschakeld"
+      },
+      "titleFormatted": {
+        "en": "[[app]] is !{{enabled|disabled}}",
+        "nl": "[[app]] is !{{ingeschakeld|uitgeschakeld}}"
+      },
       "args": [
         {
           "type": "autocomplete",
@@ -45,10 +71,12 @@
     {
       "id": "enable_app",
       "title": {
-        "en": "Enable app"
+        "en": "Enable app",
+        "nl": "App inschakelen"
       },
       "titleFormatted": {
-        "en": "Enable [[app]]"
+        "en": "Enable [[app]]",
+        "nl": "[[app]] inschakelen"
       },
       "args": [
         {
@@ -66,10 +94,12 @@
     {
       "id": "disable_app",
       "title": {
-        "en": "Disable app"
+        "en": "Disable app",
+        "nl": "App uitschakelen"
       },
       "titleFormatted": {
-        "en": "Disable [[app]]"
+        "en": "Disable [[app]]",
+        "nl": "[[app]] uitschakelen"
       },
       "args": [
         {

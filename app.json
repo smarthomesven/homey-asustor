@@ -11,54 +11,14 @@
     "en": "ASUSTOR"
   },
   "description": {
-    "en": "Reliable storage for home and office"
+    "en": "Reliable storage for home and office",
+    "nl": "Betrouwbare opslag voor thuis en kantoor"
   },
   "category": [
     "appliances"
   ],
   "tags": {
     "en": [
-      "adm",
-      "drivestor",
-      "lockerstor",
-      "flashstor",
-      "nimbustor",
-      "as-202te",
-      "as1102tl",
-      "as1104t",
-      "as1202t",
-      "as1204t",
-      "as3302t",
-      "as3304t",
-      "as4004t",
-      "as5202t",
-      "as5304t",
-      "as5402t",
-      "as5404t",
-      "as6504rs",
-      "as6504rd",
-      "as6508t",
-      "as6510t",
-      "as6512rd",
-      "as6702t",
-      "as6704t",
-      "as6706t",
-      "as6804t",
-      "as6806t",
-      "as6808t",
-      "as6810t",
-      "as7004t",
-      "as7110t",
-      "as7112rdx",
-      "as7116rdx",
-      "as7212rdx",
-      "as7216rdx",
-      "fs6706t",
-      "fs6712x",
-      "fs6806x",
-      "fs6812x"
-    ],
-    "nl": [
       "adm",
       "drivestor",
       "lockerstor",
@@ -121,7 +81,8 @@
       {
         "id": "cpu_usage_changed",
         "title": {
-          "en": "CPU Usage changed"
+          "en": "CPU Usage changed",
+          "nl": "CPU-gebruik gewijzigd"
         },
         "args": [
           {
@@ -134,7 +95,8 @@
       {
         "id": "ram_usage_changed",
         "title": {
-          "en": "RAM Usage changed"
+          "en": "RAM Usage changed",
+          "nl": "RAM-gebruik gewijzigd"
         },
         "args": [
           {
@@ -147,7 +109,8 @@
       {
         "id": "storage_used_changed",
         "title": {
-          "en": "Disk usage changed"
+          "en": "Disk usage changed",
+          "nl": "Opslaggebruik gewijzigd"
         },
         "args": [
           {
@@ -162,10 +125,12 @@
       {
         "id": "lan_port_connected",
         "title": {
-          "en": "LAN port connected"
+          "en": "LAN port connected",
+          "nl": "LAN-poort aangesloten"
         },
         "titleFormatted": {
-          "en": "LAN [[port]] !{{connected|disconnected}}"
+          "en": "LAN [[port]] !{{connected|disconnected}}",
+          "nl": "LAN [[port]] !{{aangesloten|niet aangesloten}}"
         },
         "args": [
           {
@@ -177,10 +142,11 @@
             "type": "autocomplete",
             "name": "port",
             "title": {
-              "en": "Port"
+              "en": "Port",
+              "nl": "Poort"
             },
             "placeholder": {
-              "en": "Port"
+              "en": "LAN1"
             }
           }
         ]
@@ -188,10 +154,12 @@
       {
         "id": "app_enabled",
         "title": {
-          "en": "App is enabled"
+          "en": "App is enabled",
+          "nl": "App is ingeschakeld"
         },
         "titleFormatted": {
-          "en": "[[app]] is !{{enabled|disabled}}"
+          "en": "[[app]] is !{{enabled|disabled}}",
+          "nl": "[[app]] is !{{ingeschakeld|uitgeschakeld}}"
         },
         "args": [
           {
@@ -216,10 +184,12 @@
       {
         "id": "enable_app",
         "title": {
-          "en": "Enable app"
+          "en": "Enable app",
+          "nl": "App inschakelen"
         },
         "titleFormatted": {
-          "en": "Enable [[app]]"
+          "en": "Enable [[app]]",
+          "nl": "[[app]] inschakelen"
         },
         "args": [
           {
@@ -242,10 +212,12 @@
       {
         "id": "disable_app",
         "title": {
-          "en": "Disable app"
+          "en": "Disable app",
+          "nl": "App uitschakelen"
         },
         "titleFormatted": {
-          "en": "Disable [[app]]"
+          "en": "Disable [[app]]",
+          "nl": "[[app]] uitschakelen"
         },
         "args": [
           {
