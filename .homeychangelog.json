@@ -40,5 +40,8 @@
   },
   "1.1.4": {
     "en": "Also translated README to Dutch"
+  },
+  "1.1.5": {
+    "en": "Update dependencies"
   }
 }
